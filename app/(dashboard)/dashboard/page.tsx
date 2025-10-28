@@ -46,7 +46,7 @@ export default function Dashboard() {
       // Send to backend - this now returns job_id immediately
       //http://127.0.0.1:8000/process-receipts
       const response = await fetch(
-        'receipt-sorter-production.up.railway.app/process-receipts',
+        'https://backend-production-8af5.up.railway.app/process-receipts',
         {
           method: 'POST',
           body: formData,

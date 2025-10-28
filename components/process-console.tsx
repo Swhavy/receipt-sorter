@@ -38,7 +38,7 @@ export default function ProcessConsole({
 
     const connect = () => {
       console.log(`Connecting to SSE for job ${jobId}...`)
-      source = new EventSource(`http://127.0.0.1:8000/events/${jobId}`)
+      source = new EventSource(`https://backend-production-8af5.up.railway.app/events/${jobId}`)
 
       source.onmessage = (event) => {
         const message = event.data

@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 export async function GET() {
   try {
   //  const listUrl = 'http://127.0.0.1:8000/output'
-  const listUrl = 'receipt-sorter-production.up.railway.app/output'
+  const listUrl = 'https://backend-production-8af5.up.railway.app/output'
     const res = await fetch(listUrl)
     const data = await res.json()
 
@@ -12,7 +12,7 @@ export async function GET() {
     if (!latestFile) throw new Error('No file found')
 
     //const downloadUrl = `http://127.0.0.1:8000/download/${latestFile}`
-    const downloadUrl = `receipt-sorter-production.up.railway.app/download/${latestFile}`
+    const downloadUrl = `https://backend-production-8af5.up.railway.app/download/${latestFile}`
     const response = await fetch(downloadUrl)
     const blob = await response.blob()
 
