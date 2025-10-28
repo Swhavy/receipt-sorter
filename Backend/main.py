@@ -15,7 +15,7 @@ app = FastAPI(title="ARCFLOW Receipt Sorter API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # change to your frontend domain in production
+    allow_origins=["receipt-sorter-production.up.railway.app"],  # change to your frontend domain in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
