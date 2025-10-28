@@ -99,7 +99,10 @@ export default function UploadZone({ onFilesSelected, onFolderUpload }: UploadZo
           onChange={handleFileChange}
           className="hidden"
         />
-        <input ref={folderInputRef} type="file" webkitdirectory="true" onChange={onFolderUpload} className="hidden" />
+        <input ref={folderInputRef} 
+        type="file"
+        //@ts-ignore
+         webkitdirectory="true" onChange={onFolderUpload} className="hidden" />
 
         <p className="text-xs text-slate-500 dark:text-slate-500">Supported formats: JPG, PNG, GIF, WebP</p>
       </div>

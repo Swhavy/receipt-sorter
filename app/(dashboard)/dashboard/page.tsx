@@ -11,6 +11,7 @@ import ReceiptPreview from '@/components/receipt-preview'
 import ProcessingIndicator from '@/components/processing-indicator'
 import { ThemeToggle } from '@/components/theme-toggle'
 import ProcessConsole from '@/components/process-console'
+import { toast } from 'sonner'
 
 export default function Dashboard() {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
@@ -97,12 +98,13 @@ export default function Dashboard() {
 
   const handleDownload = async () => {
     if (!downloadUrl) {
-      alert('No file ready for download yet.')
+      toast.error('No file ready for download yet.')
       return
     }
 
     try {
       const response = await fetch(downloadUrl)
+      toast.success('file would be downloaded now.')
       if (!response.ok) throw new Error('Download failed')
 
       const blob = await response.blob()
@@ -114,7 +116,7 @@ export default function Dashboard() {
       window.URL.revokeObjectURL(url)
     } catch (error) {
       console.error('Error downloading file:', error)
-      alert('Download failed. Please try again.')
+      toast.error('Download failed. Please try again.')
     }
   }
 
