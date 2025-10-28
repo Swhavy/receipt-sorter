@@ -4,8 +4,10 @@ export async function POST(req: Request) {
   try {
     const formData = await req.formData()
 
-    const backendUrl = 'http://127.0.0.1:8000/upload'
-    const processUrl = 'http://127.0.0.1:8000/process'
+    //const backendUrl = 'http://127.0.0.1:8000/upload'
+    const backendUrl = 'receipt-sorter-production.up.railway.app/upload'
+    //const processUrl = 'http://127.0.0.1:8000/process'
+    const processUrl = 'receipt-sorter-production.up.railway.app/process'
 
     // Step 1: Upload all files to FastAPI
     const uploadResponse = await fetch(backendUrl, {

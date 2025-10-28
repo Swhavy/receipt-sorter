@@ -44,10 +44,14 @@ export default function Dashboard() {
       uploadedFiles.forEach((file) => formData.append('files', file))
 
       // Send to backend - this now returns job_id immediately
-      const response = await fetch('http://127.0.0.1:8000/process-receipts', {
-        method: 'POST',
-        body: formData,
-      })
+      //http://127.0.0.1:8000/process-receipts
+      const response = await fetch(
+        'receipt-sorter-production.up.railway.app/process-receipts',
+        {
+          method: 'POST',
+          body: formData,
+        }
+      )
 
       if (!response.ok) {
         const errorData = await response.json()
@@ -56,7 +60,7 @@ export default function Dashboard() {
 
       // Get job_id - processing happens in background
       const data = await response.json()
-     // console.log('Job started:', data)
+      // console.log('Job started:', data)
 
       // Set job_id to trigger ProcessConsole SSE connection
       setJobId(data.job_id)
