@@ -192,7 +192,7 @@ export default function ProcessConsole({
 
         {/* Console Logs */}
         {isExpanded && (
-          <div className="max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500/50 scrollbar-track-transparent hover:scrollbar-thumb-blue-500/70">
+          <div className="max-h-64 scrollbar-custom overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500/50 scrollbar-track-transparent hover:scrollbar-thumb-blue-500/70">
             <div className="p-4 space-y-2 font-mono text-xs">
               {logs.length === 0 ? (
                 <div className="text-slate-500 dark:text-slate-400">

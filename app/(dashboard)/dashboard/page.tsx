@@ -56,7 +56,7 @@ export default function Dashboard() {
 
       // Get job_id - processing happens in background
       const data = await response.json()
-      console.log('Job started:', data)
+     // console.log('Job started:', data)
 
       // Set job_id to trigger ProcessConsole SSE connection
       setJobId(data.job_id)
@@ -71,7 +71,7 @@ export default function Dashboard() {
   }
 
   const handleProcessComplete = (completedJobId: string) => {
-    console.log('✅ Processing completed for job:', completedJobId)
+    //console.log('✅ Processing completed for job:', completedJobId)
 
     // Set download URL
     const downloadFilename = `sorted_receipts_${completedJobId}.docx`
@@ -305,7 +305,7 @@ export default function Dashboard() {
         />
 
         {/* DEBUG: Manual completion trigger */}
-        {isProcessing && jobId && (
+       {/*  {isProcessing && jobId && (
           <button
             onClick={() => {
               console.log('Manual complete triggered')
@@ -315,7 +315,7 @@ export default function Dashboard() {
           >
             🔧 Force Complete (Debug)
           </button>
-        )}
+        )} */}
       </main>
     </div>
   )

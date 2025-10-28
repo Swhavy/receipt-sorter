@@ -9,9 +9,12 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "v0 App",
-  description: "Created with v0",
-  generator: "v0.app",
+  title: 'ARC FLOW',
+  description:
+    'ArcFlow is an intelligent receipt processing platform that automatically organizes, sorts, and compiles uploaded receipts into a neatly formatted Word document.',
+    icons:{
+      icon: '/AF.png',
+    }
 }
 
 export default function RootLayout({
