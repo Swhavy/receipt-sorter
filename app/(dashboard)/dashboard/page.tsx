@@ -79,7 +79,9 @@ export default function Dashboard() {
 
     // Set download URL
     const downloadFilename = `sorted_receipts_${completedJobId}.docx`
-    setDownloadUrl(`http://127.0.0.1:8000/download/${downloadFilename}`)
+    setDownloadUrl(
+      `https://backend-production-8af5.up.railway.app/download/${downloadFilename}`
+    )
 
     // Update UI state
     setIsSorted(true)
