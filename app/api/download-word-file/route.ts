@@ -3,8 +3,8 @@ import { NextResponse } from 'next/server'
 
 export async function GET() {
   try {
-  //  const listUrl = 'http://127.0.0.1:8000/output'
-  const listUrl = 'https://backend-production-8af5.up.railway.app/output'
+    //  const listUrl = 'http://127.0.0.1:8000/output'
+    const listUrl = 'https://web-production-ca8483.up.railway.app/output'
     const res = await fetch(listUrl)
     const data = await res.json()
 
@@ -12,13 +12,14 @@ export async function GET() {
     if (!latestFile) throw new Error('No file found')
 
     //const downloadUrl = `http://127.0.0.1:8000/download/${latestFile}`
-    const downloadUrl = `https://backend-production-8af5.up.railway.app/download/${latestFile}`
+    const downloadUrl = `https://web-production-ca8483.up.railway.app/download/${latestFile}`
     const response = await fetch(downloadUrl)
     const blob = await response.blob()
 
     return new Response(blob, {
       headers: {
-        'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'Content-Type':
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'Content-Disposition': `attachment; filename="${latestFile}"`,
       },
     })

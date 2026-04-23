@@ -12,14 +12,19 @@ import ProcessingIndicator from '@/components/processing-indicator'
 import { ThemeToggle } from '@/components/theme-toggle'
 import ProcessConsole from '@/components/process-console'
 import { toast } from 'sonner'
+import { set } from 'date-fns'
 
 export default function Dashboard() {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
   const [isProcessing, setIsProcessing] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [jobId, setJobId] = useState<string | undefined>(undefined)
   const [isSorted, setIsSorted] = useState(false)
+  const [received, setReceived] = useState(0)
+  const [contentLength, setContentLength] = useState<number | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null)
+  const [safeToDownload, setSafeToDownload] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
 
   const handleFileSelect = (files: File[]) => {
@@ -47,11 +52,11 @@ export default function Dashboard() {
       // Send to backend - this now returns job_id immediately
       //http://127.0.0.1:8000/process-receipts
       const response = await fetch(
-        'https://backend-production-8af5.up.railway.app/process-receipts',
+        'https://web-production-ca8483.up.railway.app/process-receipts',
         {
           method: 'POST',
           body: formData,
-        }
+        },
       )
 
       if (!response.ok) {
@@ -81,7 +86,7 @@ export default function Dashboard() {
     // Set download URL
     const downloadFilename = `sorted_receipts_${completedJobId}.docx`
     setDownloadUrl(
-      `https://backend-production-8af5.up.railway.app/download/${downloadFilename}`
+      `https://web-production-ca8483.up.railway.app/download/${downloadFilename}`,
     )
 
     // Update UI state
@@ -97,26 +102,59 @@ export default function Dashboard() {
   }
 
   const handleDownload = async () => {
+    setLoading(true)
     if (!downloadUrl) {
       toast.error('No file ready for download yet.')
+      setLoading(false)
       return
     }
 
+    toast.success('file would be downloaded now.')
+
     try {
       const response = await fetch(downloadUrl)
-      toast.success('file would be downloaded now.')
       if (!response.ok) throw new Error('Download failed')
+      const reader = response.body?.getReader()
+      if (!reader) throw new Error('Failed to read download stream')
+      const contentLength = response.headers.get('Content-Length')
 
-      const blob = await response.blob()
+      setSafeToDownload(true)
+
+      let received = 0
+      let chunks: BlobPart[] = []
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        chunks.push(value)
+        received += value.length
+
+        // Update progress state (optional)
+        setReceived(received)
+        setContentLength(contentLength ? parseInt(contentLength) : null)
+        console.log(`Received ${received} / ${contentLength} bytes`)
+      }
+      console.log('Download response:', response)
+
+      const blob = new Blob(chunks, {
+        type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      })
       const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
       a.download = 'sorted-receipts.docx'
       a.click()
-      window.URL.revokeObjectURL(url)
+      // Clean up the URL object from memory after a short delay of 1s
+      setTimeout(() => {
+        window.URL.revokeObjectURL(url)
+      }, 1000)
+      toast.success('File downloaded successfully.')
     } catch (error) {
       console.error('Error downloading file:', error)
       toast.error('Download failed. Please try again.')
+    } finally {
+      setLoading(false)
+      setSafeToDownload(false)
     }
   }
 
@@ -291,11 +329,14 @@ export default function Dashboard() {
                     </div>
                     <Button
                       onClick={handleDownload}
+                      disabled={loading}
                       size="lg"
                       className="min-w-fit bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl"
                     >
                       <Download className="mr-2 h-4 w-4" />
-                      Download Word File
+                      {safeToDownload
+                        ? `downloaded: ${((received / (contentLength || 1)) * 100).toFixed(0)}%`
+                        : 'Download Word File'}
                     </Button>
                   </div>
                 </Card>
@@ -313,7 +354,7 @@ export default function Dashboard() {
         />
 
         {/* DEBUG: Manual completion trigger */}
-       {/*  {isProcessing && jobId && (
+        {/*  {isProcessing && jobId && (
           <button
             onClick={() => {
               console.log('Manual complete triggered')

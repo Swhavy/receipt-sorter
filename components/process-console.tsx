@@ -38,7 +38,9 @@ export default function ProcessConsole({
 
     const connect = () => {
       console.log(`Connecting to SSE for job ${jobId}...`)
-      source = new EventSource(`https://backend-production-8af5.up.railway.app/events/${jobId}`)
+      source = new EventSource(
+        `https://web-production-ca8483.up.railway.app/events/${jobId}`,
+      )
 
       source.onmessage = (event) => {
         const message = event.data
@@ -75,7 +77,7 @@ export default function ProcessConsole({
           message.includes('Word document saved')
         ) {
           console.log(
-            '✅ Processing completed! Triggering onComplete callback...'
+            '✅ Processing completed! Triggering onComplete callback...',
           )
           if (onComplete) {
             // Small delay to ensure all messages are received
@@ -123,10 +125,10 @@ export default function ProcessConsole({
           reconnectAttempts++
           const delay = Math.min(
             1000 * Math.pow(2, reconnectAttempts - 1),
-            10000
+            10000,
           )
           console.log(
-            `Reconnecting in ${delay}ms (attempt ${reconnectAttempts}/${maxReconnectAttempts})...`
+            `Reconnecting in ${delay}ms (attempt ${reconnectAttempts}/${maxReconnectAttempts})...`,
           )
 
           setTimeout(() => {
@@ -208,8 +210,8 @@ export default function ProcessConsole({
                       {log.status === 'completed'
                         ? '✓'
                         : log.status === 'error'
-                        ? '✗'
-                        : '→'}
+                          ? '✗'
+                          : '→'}
                     </span>
                     <div className="flex-1">
                       <span className="text-slate-600 dark:text-slate-400">
